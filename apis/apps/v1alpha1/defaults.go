@@ -582,3 +582,10 @@ func SetDefaultsImagePullJob(obj *ImagePullJob) {
 		obj.Spec.PullPolicy.BackoffLimit = utilpointer.Int32Ptr(3)
 	}
 }
+
+// SetDefaults_UnitedDeployment set default values for UnitedDeployment.
+func SetDefaultsUnitedObject(obj *UnitedObject) {
+	if obj.Spec.RevisionHistoryLimit == nil {
+		obj.Spec.RevisionHistoryLimit = utilpointer.Int32Ptr(10)
+	}
+}

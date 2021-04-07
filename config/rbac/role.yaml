@@ -303,6 +303,26 @@ rules:
   - patch
   - update
 - apiGroups:
+  - apps.kruise.io
+  resources:
+  - unitedobjects
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps.kruise.io
+  resources:
+  - unitedobjects/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - batch
   resources:
   - jobs

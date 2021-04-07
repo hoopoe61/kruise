@@ -19,6 +19,7 @@ package util
 
 import (
 	"math"
+	"reflect"
 	"sync"
 
 	"github.com/docker/distribution/reference"
@@ -144,4 +145,17 @@ func IsContainerImageEqual(image1, image2 string) bool {
 	}
 
 	return repo1 == repo2 && tag1 == tag2
+}
+
+// IfContainItem returns true when the value is one element of the array
+func IfContainItem(value interface{}, array interface{}) bool {
+	if reflect.TypeOf(array).Kind() == reflect.Slice {
+		s := reflect.ValueOf(array)
+		for i := 0; i < s.Len(); i++ {
+			if reflect.DeepEqual(value, s.Index(i).Interface()) {
+				return true
+			}
+		}
+	}
+	return false
 }

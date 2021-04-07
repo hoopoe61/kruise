@@ -14,6 +14,7 @@ require (
 	github.com/docker/distribution v2.7.2-0.20200708230840-70e0022e42fd+incompatible
 	github.com/docker/docker v1.4.2-0.20180612054059-a9fbbdc8dd87
 	github.com/docker/go-events v0.0.0-20190806004212-e31b211e4f1c // indirect
+	github.com/evanphx/json-patch v4.5.0+incompatible
 	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
 	github.com/go-openapi/spec v0.19.2
 	github.com/gogo/googleapis v1.4.0 // indirect

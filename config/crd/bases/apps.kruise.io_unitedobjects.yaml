@@ -1,0 +1,216 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.2.9
+  creationTimestamp: null
+  name: unitedobjects.apps.kruise.io
+spec:
+  additionalPrinterColumns:
+  - JSONPath: .status.instances
+    description: The desired number of instances.
+    name: DESIRED
+    type: integer
+  - JSONPath: .status.existInstances
+    description: The number of all currently existing instances.
+    name: CURRENT
+    type: integer
+  - JSONPath: .status.updatedInstances
+    description: The number of updated instances.
+    name: UPDATED
+    type: integer
+  - JSONPath: .metadata.creationTimestamp
+    description: CreationTimestamp is a timestamp representing the server time when
+      this object was created. It is not guaranteed to be set in happens-before order
+      across separate operations. Clients may not set this value. It is represented
+      in RFC3339 form and is in UTC.
+    name: AGE
+    type: date
+  group: apps.kruise.io
+  names:
+    kind: UnitedObject
+    listKind: UnitedObjectList
+    plural: unitedobjects
+    shortNames:
+    - uo
+    singular: unitedobject
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      description: UnitedObject is the Schema for the unitedobjects API
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          description: UnitedObjectSpec defines the desired state of UnitedObject
+          properties:
+            instances:
+              description: Customization describes the instantiation detail of each
+                instances
+              items:
+                properties:
+                  instanceValues:
+                    description: Describe the instantition values of an instance
+                    items:
+                      properties:
+                        fieldPath:
+                          description: 'the path of the object, for example: spec.selector.app'
+                          type: string
+                        value:
+                          description: the value for FieldPath
+                          type: string
+                      required:
+                      - fieldPath
+                      - value
+                      type: object
+                    type: array
+                  name:
+                    description: Name of the instances
+                    type: string
+                required:
+                - name
+                type: object
+              type: array
+            revisionHistoryLimit:
+              description: Indicates the number of histories to be conserved If unspecified,
+                defaults to 10
+              format: int32
+              type: integer
+            selector:
+              description: Selector is a label query over objects that should match
+                the specification in intances It must match the pod template's labels
+              properties:
+                matchExpressions:
+                  description: matchExpressions is a list of label selector requirements.
+                    The requirements are ANDed.
+                  items:
+                    description: A label selector requirement is a selector that contains
+                      values, a key, and an operator that relates the key and values.
+                    properties:
+                      key:
+                        description: key is the label key that the selector applies
+                          to.
+                        type: string
+                      operator:
+                        description: operator represents a key's relationship to a
+                          set of values. Valid operators are In, NotIn, Exists and
+                          DoesNotExist.
+                        type: string
+                      values:
+                        description: values is an array of string values. If the operator
+                          is In or NotIn, the values array must be non-empty. If the
+                          operator is Exists or DoesNotExist, the values array must
+                          be empty. This array is replaced during a strategic merge
+                          patch.
+                        items:
+                          type: string
+                        type: array
+                    required:
+                    - key
+                    - operator
+                    type: object
+                  type: array
+                matchLabels:
+                  additionalProperties:
+                    type: string
+                  description: matchLabels is a map of {key,value} pairs. A single
+                    {key,value} in the matchLabels map is equivalent to an element
+                    of matchExpressions, whose key field is "key", the operator is
+                    "In", and the values array contains only "value". The requirements
+                    are ANDed.
+                  type: object
+              type: object
+            template:
+              description: Template describes the instance that will be created
+              type: object
+          required:
+          - instances
+          - selector
+          - template
+          type: object
+        status:
+          description: UnitedObjectStatus defines the observed state of UnitedObject
+          properties:
+            collisionCount:
+              format: int32
+              type: integer
+            conditions:
+              description: Represents the latest available observations of a UnitedService's
+                current state.
+              items:
+                properties:
+                  lastTransitionTime:
+                    description: Last time the condition transitioned from one status
+                      to another.
+                    format: date-time
+                    type: string
+                  message:
+                    description: A human readable message indicating details about
+                      the transition.
+                    type: string
+                  reason:
+                    description: The reason for the condition's last transition.
+                    type: string
+                  status:
+                    description: Status of the condition, one of True, False, Unknown.
+                    type: string
+                  type:
+                    description: Type of in place set condition.
+                    type: string
+                type: object
+              type: array
+            currentRevision:
+              description: CurrentRevision, if not empty, indicates the current version
+                of the UnitedService.
+              type: string
+            existInstances:
+              description: The number of created instances.
+              format: int32
+              type: integer
+            instances:
+              description: Instances is the most recently observed number of replicas.
+              format: int32
+              type: integer
+            observedGeneration:
+              description: 'INSERT ADDITIONAL STATUS FIELD - define observed state
+                of cluster Important: Run "make" to regenerate code after modifying
+                this file'
+              format: int64
+              type: integer
+            updatedInstances:
+              description: The number of instances in current version.
+              format: int32
+              type: integer
+            updatedRevision:
+              type: string
+          required:
+          - currentRevision
+          - instances
+          - updatedInstances
+          type: object
+      type: object
+  version: v1alpha1
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
